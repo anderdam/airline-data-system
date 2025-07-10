@@ -1,0 +1,112 @@
+services:
+  spark-master:
+    image: bitnami/spark:latest
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+
+  spark-worker:
+    image: bitnami/spark:latest
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: flights
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    depends_on:
+      - postgres-db
+    ports:
+      - "8083:8080"
+
+  mongo-db:
+    image: mongo:6
+    container_name: mongo-db
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  hadoop-namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-namenode
+    environment:
+      - CLUSTER_NAME=test-cluster
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+
+  hadoop-datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-datanode
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-namenode:9000
+    depends_on:
+      - hadoop-namenode
+    ports:
+      - "9864:9864"
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+
+  hive-metastore:
+    image: bde2020/hive-metastore-postgresql:2.3.0
+    container_name: hive-metastore
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-namenode:8020
+      - DB_TYPE=postgres
+      - DB_HOST=postgres-db
+      - DB_PORT=5432
+      - DB_NAME=flights
+      - DB_USER=user
+      - DB_PASS=password
+    depends_on:
+      - postgres-db
+      - hadoop-namenode
+      - hadoop-datanode
+    ports:
+      - "9083:9083"
+
+  hive-server:
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    container_name: hive-server
+    environment:
+      - HIVE_METASTORE_URI=thrift://hive-metastore:9083
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-namenode:8020
+      - HIVE_SITE_CONF_hive_server2_thrift_bind_host=0.0.0.0
+      - HIVE_SITE_CONF_hive_server2_thrift_port=10000
+      - HIVE_SITE_CONF_hive_server2_enable_doAs=false
+    ports:
+      - "10001:10000"
+    depends_on:
+      - hive-metastore
+    volumes:
+      - ./hive-site.xml:/opt/hive/conf/hive-site.xml
+
+
+volumes:
+  postgres_data:
+  mongo_data:
+  hadoop_namenode:
+  hadoop_datanode:
