@@ -39,8 +39,17 @@ repos:
       - id: dotenv-linter
 
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: detect-secrets
         args: [ "--baseline", ".secrets.baseline" ]
         exclude: ^(build|dist|\.venv|node_modules)/
+
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1  # Latest stable version
+    hooks:
+      - id: isort
+        name: Sort Imports
+        args: [ "--profile", "black" ]
+        language_version: python3
+        exclude: ^(build|dist|\.venv)/
