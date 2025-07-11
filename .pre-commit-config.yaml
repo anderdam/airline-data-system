@@ -24,7 +24,6 @@ repos:
     rev: v5.0.0
     hooks:
       - id: check-added-large-files
-#      - id: detect-aws-credentials
       - id: check-merge-conflict
       - id: check-json
       - id: check-yaml
