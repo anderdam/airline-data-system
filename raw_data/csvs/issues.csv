@@ -1,0 +1,5 @@
+Title,Body,Labels
+Define Hive Table Schema for Flights,"Create a Hive table named flights with columns for flight_date, delays, and cancellations.",data modeling,hive,backend
+Upload Flights CSV to HDFS,"Move flights.csv into /user/hive/warehouse/flights using hdfs dfs -put.",data data_ingestion,hdfs
+Load Data into Hive Table,"Run LOAD DATA INPATH and validate row count.",etl,hive
+Write HiveQL Queries for Delay Analytics,"Average delays, cancellations, top 10 routes.",analytics,hiveql

@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.12.2
+    rev: v0.12.3
     hooks:
       - id: ruff
 
@@ -16,6 +16,15 @@ repos:
     rev: v1.16.1
     hooks:
       - id: mypy
+        args: [ --install-types, --non-interactive ]
+        additional_dependencies:
+          - types-requests
+          - pymongo
+          - python-dotenv
+          - mongomock
+          - pyspark
+        language_version: python3.13  # Match your virtualenv version
+
 
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.6
@@ -53,3 +62,10 @@ repos:
         args: [ "--profile", "black" ]
         language_version: python3
         exclude: ^(build|dist|\.venv)/
+
+  - repo: https://github.com/myint/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        args: [ --remove-all-unused-imports, --remove-unused-variables ]
+#        exclude: tests/  # optional

@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "id": "4269415",
+      "gmt": "-10",
+      "airport_id": "1",
+      "iata_code": "AAA",
+      "city_iata_code": "AAA",
+      "icao_code": "NTGA",
+      "country_iso2": "PF",
+      "geoname_id": "6947726",
+      "latitude": "-17.05",
+      "longitude": "-145.41667",
+      "airport_name": "Anaa",
+      "country_name": "French Polynesia",
+      "phone_number": null,
+      "timezone": "Pacific/Tahiti"
+    },
+    {
+      "id": "4269416",
+      "gmt": "10",
+      "airport_id": "2",
+      "iata_code": "AAB",
+      "city_iata_code": "AAB",
+      "icao_code": "YARY",
+      "country_iso2": "AU",
+      "geoname_id": "7730796",
+      "latitude": "-26.7",
+      "longitude": "141.04167",
+      "airport_name": "Arrabury",
+      "country_name": "Australia",
+      "phone_number": null,
+      "timezone": "Australia/Brisbane"
+    }
+  ]
+}
